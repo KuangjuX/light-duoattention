@@ -7,8 +7,8 @@ import cutlass
 import cutlass.cute as cute
 from cutlass import Int32
 
-import utils
-from fast_math import FastDivmod, clz
+from light_duo_attn.kernels import utils
+from light_duo_attn.kernels.fast_math import FastDivmod, clz
 
 
 @dataclass

@@ -6,7 +6,7 @@ import operator
 import cutlass
 import cutlass.cute as cute
 
-import utils
+from light_duo_attn.kernels import utils
 
 
 class PackGQA:

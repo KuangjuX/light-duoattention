@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 import cutlass
 import cutlass.cute as cute
 
-from seqlen_info import SeqlenInfoQK
+from light_duo_attn.kernels.seqlen_info import SeqlenInfoQK
 
 
 @dataclass(frozen=True)

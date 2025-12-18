@@ -18,13 +18,14 @@ import cutlass.utils.hopper_helpers as sm90_utils_basic
 from cutlass import Float32, Int32, const_expr
 from cutlass.cute.nvgpu import cpasync, warp, warpgroup
 
-from block_info import BlockInfo
-from mask import AttentionMask  
-from named_barrier import NamedBarrierFwd
-from pack_gqa import PackGQA
-from seqlen_info import SeqlenInfoQK
-from softmax import Softmax
-from tile_scheduler import (
+from light_duo_attn.kernels import utils
+from light_duo_attn.kernels.block_info import BlockInfo
+from light_duo_attn.kernels.mask import AttentionMask  
+from light_duo_attn.kernels.named_barrier import NamedBarrierFwd
+from light_duo_attn.kernels.pack_gqa import PackGQA
+from light_duo_attn.kernels.seqlen_info import SeqlenInfoQK
+from light_duo_attn.kernels.softmax import Softmax
+from light_duo_attn.kernels.tile_scheduler import (
     ParamsBase,
     SingleTileLPTScheduler,
     SingleTileScheduler,

@@ -7,7 +7,7 @@ import cutlass.cute as cute
 import torch
 from cutlass.cute.runtime import from_dlpack
 
-from .flash_streaming_fwd_sm90 import FlashStreamingForwardSm90
+from light_duo_attn.kernels.flash_streaming_fwd_sm90 import FlashStreamingForwardSm90
 
 # Mapping from PyTorch dtypes to Cutlass dtypes
 torch2cute_dtype_map = {

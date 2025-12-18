@@ -3,8 +3,8 @@ import math
 import pytest
 import torch
 
-from light_duo_attn import streaming_sparse_attn_func
-from streaming_attention_ref import block_streaming_attention_ref
+from light_duo_attn.kernels import streaming_sparse_attn_func
+from .streaming_attention_ref import block_streaming_attention_ref
 
 
 def is_hopper():

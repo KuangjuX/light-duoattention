@@ -6,7 +6,7 @@ from typing import Optional
 import cutlass
 import cutlass.cute as cute
 
-import utils
+from light_duo_attn.kernels import utils
 
 
 @dataclass(frozen=True)

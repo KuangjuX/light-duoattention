@@ -8,7 +8,7 @@ import cutlass
 import cutlass.cute as cute
 from cutlass import Float32
 
-import utils
+from light_duo_attn.kernels import utils
 
 
 class Softmax:
