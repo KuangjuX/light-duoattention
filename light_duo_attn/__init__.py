@@ -1,0 +1,1 @@
+from .kernels.streaming_sparse_attention_interface import streaming_sparse_attn_func
