@@ -77,34 +77,18 @@ We provide benchmarking tools to compare Streaming Attention with FlashAttention
 ```bash
 cd benchmarks
 
-# Run with default settings (batch_size=1, seqlens=[4096, 8192, 16384])
-python bench_attention.py --causal
+# Run with default settings
+python bench_attention.py
 
 # Custom configuration
 python bench_attention.py \
     --batch-sizes 1 2 4 \
-    --seqlens 2048 4096 8192 16384 \
+    --seqlens 8192 16384 \
     --num-heads 32 \
     --head-dim 128 \
     --recent-size 256 \
-    --sink-size 128 \
-    --causal
+    --sink-size 128
 ```
-
-### Visualize Results
-
-```bash
-# Install matplotlib
-pip install matplotlib
-
-# Generate plots from benchmark CSV
-python plot_results.py benchmark_results_20231219_143022.csv --output-dir ./plots
-```
-
-The benchmark outputs:
-- **CSV file**: Detailed performance metrics (time, TFLOPS, memory)
-- **Console table**: Side-by-side comparison of Streaming Attention vs FlashAttention
-- **Plots** (optional): Time, throughput, speedup, and memory comparison charts
 
 ### Key Parameters
 
