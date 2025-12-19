@@ -11,7 +11,7 @@ https://github.com/user-attachments/assets/1c07508d-da90-4e5c-91f7-53fa3a976003
 
 ## Overview
 
-`Light-DuoAttention` provides a lightweight, fused CUDA kernel for **DuoAttention**. This attention mechanism is a hybrid approach designed for efficient long-context processing. 
+`Light-DuoAttention` provides a lightweight CUDA kernel for **DuoAttention**. This attention mechanism is a hybrid approach designed for efficient long-context processing. 
 Unlike standard attention where all heads behave identically, DuoAttention employs two distinct types of heads:
 
 1.  **Retrieval Heads**: These heads perform **Full Attention** over the entire sequence (or a large chunk), allowing them to capture rich, long-range dependencies and act as a powerful information retrieval component.
