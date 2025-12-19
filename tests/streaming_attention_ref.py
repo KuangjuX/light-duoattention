@@ -108,7 +108,7 @@ def construct_streaming_mask(
     return mask
 
 
-def block_streaming_attention_ref(
+def streaming_attention_ref(
     q: torch.Tensor,
     k: torch.Tensor,
     v: torch.Tensor,

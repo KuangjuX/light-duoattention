@@ -49,6 +49,7 @@ setup(
         "torch==2.8.0",
         "cuda-python>=12.8.0",
         "nvidia-cutlass-dsl==4.1.0",
+        "flash-attn>=2.8.0",
     ],
     extras_require={
         "dev": [

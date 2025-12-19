@@ -4,7 +4,7 @@ import pytest
 import torch
 
 from light_duo_attn.kernels import streaming_sparse_attn_func
-from .streaming_attention_ref import block_streaming_attention_ref
+from .streaming_attention_ref import streaming_attention_ref
 
 
 def is_hopper():
@@ -67,7 +67,7 @@ def test_streaming_attention(seqlen, dtype, sink_size, local_size, batch_size):
     )
 
     head_mask_type = torch.full((num_heads,), -1, dtype=torch.int32, device=device)
-    out_ref_varlen, _ = block_streaming_attention_ref(
+    out_ref_varlen, _ = streaming_attention_ref(
         q_varlen,
         k_varlen,
         v_varlen,
@@ -182,7 +182,7 @@ def test_chunked_streaming_attention(seqlen, sink_size, chunk_size, batch_size):
     out_cuda = torch.cat(chunked_outputs, dim=1)
 
     head_mask_type = torch.full((num_heads,), -1, dtype=torch.int32, device=device)
-    out_ref_varlen, _ = block_streaming_attention_ref(
+    out_ref_varlen, _ = streaming_attention_ref(
         q_varlen,
         k_varlen,
         v_varlen,
@@ -309,7 +309,7 @@ def test_paged_streaming_attention(
 
     head_mask_type = torch.full((num_heads,), -1, dtype=torch.int32, device=device)
 
-    out_ref_varlen, _ = block_streaming_attention_ref(
+    out_ref_varlen, _ = streaming_attention_ref(
         q_varlen,
         k_varlen,
         v_varlen,
@@ -455,7 +455,7 @@ def test_paged_chunked_streaming_attention(
 
     head_mask_type = torch.full((num_heads,), -1, dtype=torch.int32, device=device)
 
-    out_ref_varlen, _ = block_streaming_attention_ref(
+    out_ref_varlen, _ = streaming_attention_ref(
         q_varlen,
         k_varlen,
         v_varlen,
@@ -590,7 +590,7 @@ def test_streaming_attention_gqa(
     expanded_v_varlen = v_varlen.repeat_interleave(gqa_group_size, dim=1)
     # shape: [N, num_heads, head_dim]
 
-    out_ref_varlen, _ = block_streaming_attention_ref(
+    out_ref_varlen, _ = streaming_attention_ref(
         q_varlen,
         expanded_k_varlen,
         expanded_v_varlen,
@@ -708,7 +708,7 @@ def test_streaming_attention_gqa_with_varlen(seqlen):
     expanded_k_varlen = k_varlen.repeat_interleave(gqa_group_size, dim=1)
     expanded_v_varlen = v_varlen.repeat_interleave(gqa_group_size, dim=1)
 
-    out_ref_varlen, _ = block_streaming_attention_ref(
+    out_ref_varlen, _ = streaming_attention_ref(
         q=q_varlen,
         k=expanded_k_varlen,
         v=expanded_v_varlen,

@@ -2,6 +2,13 @@
 
 A lightweight CuTe-based CUDA kernel for DuoAttention, optimized for large language model inference.
 
+## Demo
+
+The video below demonstrates Light-DuoAttention in action within the sglang. We replaced the standard prefill attention(during `forward_extend`) with our kernel and ran the classic "Needle in a Haystack" (NIAH) test.
+
+https://github.com/user-attachments/assets/1c07508d-da90-4e5c-91f7-53fa3a976003
+
+
 ## Overview
 
 `Light-DuoAttention` provides a lightweight, fused CUDA kernel for **DuoAttention**. This attention mechanism is a hybrid approach designed for efficient long-context processing. 
@@ -49,4 +56,60 @@ output, lse = streaming_sparse_attn_func(
 
 print(f"Output shape: {output.shape}")  # [1, 2048, 32, 128]
 ```
+
+## Testing
+
+Run the test suite to verify the implementation:
+
+```bash
+# Run 
+pytest tests/test_streaming_attention.py::test_streaming_attention
+# Run specific test
+pytest tests/test_streaming_attention.py -v
+```
+
+## Benchmarking
+
+We provide benchmarking tools to compare Streaming Attention with FlashAttention.
+
+### Quick Benchmark
+
+```bash
+cd benchmarks
+
+# Run with default settings (batch_size=1, seqlens=[4096, 8192, 16384])
+python bench_attention.py --causal
+
+# Custom configuration
+python bench_attention.py \
+    --batch-sizes 1 2 4 \
+    --seqlens 2048 4096 8192 16384 \
+    --num-heads 32 \
+    --head-dim 128 \
+    --recent-size 256 \
+    --sink-size 128 \
+    --causal
+```
+
+### Visualize Results
+
+```bash
+# Install matplotlib
+pip install matplotlib
+
+# Generate plots from benchmark CSV
+python plot_results.py benchmark_results_20231219_143022.csv --output-dir ./plots
+```
+
+The benchmark outputs:
+- **CSV file**: Detailed performance metrics (time, TFLOPS, memory)
+- **Console table**: Side-by-side comparison of Streaming Attention vs FlashAttention
+- **Plots** (optional): Time, throughput, speedup, and memory comparison charts
+
+### Key Parameters
+
+- `--recent-size`: Size of the recent token window (default: 256)
+- `--sink-size`: Number of initial sink tokens to always attend to (default: 128)
+- `--num-warmup`: Warmup iterations for stable measurements (default: 5)
+- `--num-iters`: Benchmark iterations for averaging (default: 50)
 
