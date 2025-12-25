@@ -30,6 +30,8 @@ pip install -e .
 
 ## Quick Start
 
+### Basic Streaming Attention
+
 ```python
 import torch
 import math
@@ -56,6 +58,45 @@ output, lse = streaming_sparse_attn_func(
 
 print(f"Output shape: {output.shape}")  # [1, 2048, 32, 128]
 ```
+
+### Model Weight Reordering for DuoAttention
+
+To use DuoAttention with your model, you need to reorder the attention weights so that retrieval (full attention) heads and streaming heads are grouped together:
+
+```python
+import torch
+from transformers import AutoModelForCausalLM
+from light_duo_attn import reorder_weights_for_duo_attn
+
+# Load your model
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b-hf",
+    torch_dtype=torch.bfloat16,
+    device_map="auto",
+)
+
+# Define which heads should be full attention vs streaming
+# For example: first 25% of KV heads are full attention
+num_kv_heads = model.config.num_key_value_heads
+num_full = num_kv_heads // 4
+pattern = [1] * num_full + [0] * (num_kv_heads - num_full)
+full_attention_heads = [pattern] * model.config.num_hidden_layers
+
+# Apply weight reordering
+duo_attn_config = reorder_weights_for_duo_attn(
+    model=model,
+    full_attention_heads=full_attention_heads,
+    sink_size=4,
+    recent_size=256,
+    num_attention_heads=model.config.num_attention_heads,
+    num_key_value_heads=model.config.num_key_value_heads,
+    hidden_size=model.config.hidden_size,
+)
+
+# Now the model is ready for DuoAttention inference!
+# Use duo_attn_config to configure your attention computation
+```
+
 
 ## Testing
 
@@ -96,4 +137,13 @@ python bench_attention.py \
 - `--sink-size`: Number of initial sink tokens to always attend to (default: 128)
 - `--num-warmup`: Warmup iterations for stable measurements (default: 5)
 - `--num-iters`: Benchmark iterations for averaging (default: 50)
+
+<p align="center">
+<img src="assets/benchmark_kernel.png" alt="Light-DuoAttention Benchmark" width="500"><br>
+Figure 1. Performance comparison of FlashAttention and Streaming Attention. Sink size: 128, Recent size: 256.
+</p>
+
+Note: Additional benchmarks are planned for future releases, including both low-level kernel performance evaluation and end-to-end model inference benchmarking. These comprehensive performance assessments will provide deeper insight into the efficiency and practical impact of Light-DuoAttention in real-world scenarios. Please stay tuned for upcoming tools and results.
+
+
 
